@@ -16,8 +16,7 @@ It allows users to browse, save, and redeem discount coupons seamlessly.
 
 ## 🛠 Tech Stack  
 ### 🔹 **Frontend:**  
-- React Native  
-- Redux (if used)  
+- React Native   
 - React Navigation  
 
 ### 🔹 **Backend:**  
