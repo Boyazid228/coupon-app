@@ -13,14 +13,23 @@ const Shops = () => {
     const { name } = route.params;
     const { width } = Dimensions.get('window');
 
-    const { data: menuData, loading: menuLoading, error: menuError } = ApiHook(`/getShops?id=${id}`);
+    const { getData, data: menuData, loading: menuLoading, error: menuError } = ApiHook();
     useEffect(() => {
         navigation.setOptions({
             title: name,
             headerBackTitle: 'Back',
         });
+
+        const load = async ()=>{
+            const loadData = await getData(`/getShops/${id}`)
+
+        }
+        load()
+
     }, [navigation]);
-    if (menuLoading) return <ActivityIndicator size="large" color="#ffff" />;
+
+
+    if (menuLoading) return <ActivityIndicator style={{margin: "auto"}} size="large" color="#ffff" />;
 
     if (!menuData  || menuData.length === 0 && !menuLoading) {
         return (
@@ -47,8 +56,10 @@ const Shops = () => {
                             <View>
                                 <Image
                                     style={styles.img}
-                                    source={{ uri: config.img_link+item.img }}
+                                    source={{ uri: config.img_link+item.preview }}
+                                    defaultSource={require('@/assets/loader/loader.gif')}
                                 />
+
                             </View>
                             <View style={styles.textBox}>
                                 <Text style={styles.name}>{item.name}</Text>

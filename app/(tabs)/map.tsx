@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, View, Text, Image, Linking} from 'react-native';
+import {StyleSheet, View, Text, Image, Linking, ActivityIndicator} from 'react-native';
 import MapView, {Callout, Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import customMarkerImage from '@/assets/images/location-marker.png';
 import customUserMarkerImage from '@/assets/images/pin-point.png';
+import ApiHook from "@/hooks/ApiHook";
+import {useNavigation} from "@react-navigation/native";
+import config from "@/settings";
 export default function Map() {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
-    const nearbyPlaces = [
-        { id: 1, latitude: 37.29996374699623, longitude: 126.83993279957564, title: 'Place 1' },
-        { id: 2, latitude: 37.29996354699623, longitude: 126.83663275957564, title: 'Place 2' },
-        // Добавьте больше мест по необходимости
-    ];
+
+    const navigation = useNavigation();
+    const handlePress = (id , name) => {
+        navigation.navigate('card', {id: id, name: name});
+    };
+
+    const {getData, data: marks, loading: loading, error: error } = ApiHook();
+
 
     useEffect(() => {
         (async () => {
@@ -24,19 +30,37 @@ export default function Map() {
 
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
+
+            const mark = await getData(`/getMarks`)
         })();
     }, []);
+
+
+
+
+    if (loading) return  <ActivityIndicator style={{margin: "auto"}} size="large" color="#ffff" />;
 
     if (errorMsg) {
         return <Text>{errorMsg}</Text>;
     }
 
     if (!location) {
-        return <Text>Waiting...</Text>;
+        return  <ActivityIndicator style={{margin: "auto"}} size="large" color="#ffff" />;
     }
-    const handlePress = (link) => {
-        Linking.openURL('https://example.com');
-    };
+
+    if (!marks  || marks.length === 0 && !error) {
+
+
+        return (
+            <View style={styles.container}>
+
+                <Text >Data not found</Text>
+            </View>
+        );
+    }
+    if (error) return <Text>Error: {error?.message}</Text>;
+
+    console.log()
 
     return (
         <View style={styles.container}>
@@ -64,19 +88,19 @@ export default function Map() {
                     </Callout>
 
                 </Marker>
-                {nearbyPlaces.map(place => (
+                {marks.map(place => (
                     <Marker
                         key={place.id}
                         coordinate={{
                             latitude: place.latitude,
                             longitude: place.longitude,
                         }}
-                        title={place.title}
+                        title={place.shop.name}
                     >
-                        <Image source={customMarkerImage} style={styles.markerImage} />
+                        <Image source={place.shop.logo? {uri: config.img_link+place.shop.logo} :customMarkerImage} style={styles.markerImage} />
                         <Callout>
                             <View style={styles.callout}>
-                                <Text onPress={() =>handlePress("link")} >{place.title}</Text>
+                                <Text onPress={() =>handlePress(place.shop.id, place.shop.name)} style={{textAlign: "center"}}>{place.shop.name}</Text>
                             </View>
                         </Callout>
                     </Marker>

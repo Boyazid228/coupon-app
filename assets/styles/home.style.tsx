@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
         width: "100%",
         flexWrap: "wrap",
         flexDirection: "row",
+        margin: "auto",
+        justifyContent: "center",
+        gap: 10
 
 
 

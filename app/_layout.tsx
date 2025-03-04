@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Card from "@/app/card";
 import {inspect} from "util";
+import Reviews from "@/app/reviews";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -42,6 +43,10 @@ export default function RootLayout() {
           <Stack.Screen name="card"  />
           <Stack.Screen name="cuponPage"  />
           <Stack.Screen name="shops"  />
+          <Stack.Screen name="reviews"  />
+          <Stack.Screen name="vlogPage"  />
+          <Stack.Screen name="auth/signup"  />
+          <Stack.Screen name="auth/login"  />
           <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>

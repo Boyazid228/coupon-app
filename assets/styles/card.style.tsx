@@ -3,7 +3,7 @@ import {StyleSheet} from "react-native";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
 
     },
     cardBox:{
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     i:{
         width: "100%",
         height: "100%",
+        borderRadius: '50%',
     },
     subTItlt:{
         fontSize: 14,
@@ -124,6 +125,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: "center",
         marginTop:25
+    },
+    short_desc:{
+        width: "60%",
     }
 
 });

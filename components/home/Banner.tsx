@@ -7,7 +7,7 @@ import config from "@/settings";
 
 const Banner = ({ banner, is_coupon }) => {
 
-    let  img = config.img_link+banner.img.replace(/\\/g, '/');
+    let  img = config.img_link+banner.preview.replace(/\\/g, '/');
 
     const navigation = useNavigation();
     function handleImagePress(id, name) {
@@ -25,6 +25,7 @@ const Banner = ({ banner, is_coupon }) => {
             <ImageBackground
                 source={{ uri: img }}
                 style={styles.backgroundImage}
+                defaultSource={require('@/assets/loader/loader.gif')} // Fallback image
             >
 
                 <Stars stars_count={banner.rating}/>

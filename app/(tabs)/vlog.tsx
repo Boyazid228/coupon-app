@@ -1,44 +1,82 @@
-import React from 'react';
-import {View, Text, FlatList} from "react-native";
-import styles from "@/assets/styles/vlog.style"
-import Banner from "@/components/myVlog";
-import MyVlog from "@/components/myVlog";
-import SearchBox from "@/components/SearchBox";
+import React, { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
+import styles from '@/assets/styles/vlog.style';
+import SearchBox from '@/components/SearchBox';
 import MasonryList from 'react-native-masonry-list';
+import ApiHook from '@/hooks/ApiHook';
+import config from '@/settings';
+import { useNavigation } from '@react-navigation/native';
+
 const Vlog = () => {
+    const navigation = useNavigation();
+    const { getData, loading, error } = ApiHook();
+    const [vlogData, setVlogData] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
-    const data = [
-        { id: '1', title: 'Item 1', uri: "https://luehangs.site/pic-chat-app-images/beautiful-blond-blonde-hair-478544.jpg"  },
+    const loadData = async (isRefreshing = false) => {
+        try {
+            const data = await getData(`/getVlogs/`);
+            const formattedData = data.map(vlog => ({
+                ...vlog,
+                url: config.img_link + vlog.img,
+            }));
+            setVlogData(formattedData);
+        } catch (err) {
+            console.error('Error loading data:', err);
+        } finally {
+            if (isRefreshing) setRefreshing(false);
+        }
+    };
 
-        { id: '3', title: 'Item 3', url: "https://luehangs.site/pic-chat-app-images/attractive-balance-beautiful-186263.jpg" },
-        { id: '4', title: 'Item 4', url: "https://luehangs.site/pic-chat-app-images/beautiful-beautiful-woman-beauty-9763.jpg" },
-        { id: '5', title: 'Item 5', url: 'https://via.placeholder.com/350/0000FF/FFFFFF?Text=Item5' },
-        { id: '6', title: 'Item 6', url: "https://luehangs.site/pic-chat-app-images/animals-avian-beach-760984.jpg" },
-    ];
+    useEffect(() => {
+        loadData();
+    }, []);
 
+    const handleRefresh = () => {
+        setRefreshing(true); // Указываем, что идет обновление
+        loadData(true);      // Вызываем функцию загрузки данных
+    };
 
+    const navigateToVlog = (item) => {
+        navigation.navigate('vlogPage', { item });
+    };
 
-
-    function go() {
-        alert("go")
+    if (loading && !refreshing) {
+        return (
+            <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
     }
+
+    if (error) {
+        return (
+            <View style={styles.container}>
+                <Text style={{ textAlign: 'center', marginTop: 20 }}>Ошибка: {error.message || 'Что-то пошло не так!'}</Text>
+            </View>
+        );
+    }
+
+    if (!vlogData || vlogData.length === 0) {
+        return (
+            <View style={styles.container}>
+                <Text style={{ textAlign: 'center', marginTop: 20 }}>Данные не найдены</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
-
-            <SearchBox/>
-
+            <SearchBox />
             <View style={styles.con}>
                 <MasonryList
-                    images={data}
-                    onPressImage = {go}
+                    images={vlogData}
+                    onPressImage={navigateToVlog}
+                    imageContainerStyle={styles.img}
+                    refreshing={refreshing} // Передаем состояние обновления
+                    onRefresh={handleRefresh} // Передаем функцию обновления
                 />
-
             </View>
-
-
-
-
-
         </View>
     );
 };

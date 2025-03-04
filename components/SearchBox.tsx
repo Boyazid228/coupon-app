@@ -3,7 +3,6 @@ import {Text, TextInput, TouchableOpacity, View} from "react-native";
 import styles from "@/assets/styles/home.style";
 
  const SearchBox = ({text, setText, search}) => {
-
     return (
         <View style={styles.searchBox}>
             <TextInput

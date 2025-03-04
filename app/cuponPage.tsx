@@ -1,11 +1,21 @@
-import React, { useEffect } from 'react';
-import {Image, Text, TouchableOpacity, View, ScrollView, Dimensions, ActivityIndicator} from "react-native";
+import React, {useEffect, useState} from 'react';
+import {
+    Image,
+    Text,
+    TouchableOpacity,
+    View,
+    ScrollView,
+    Dimensions,
+    ActivityIndicator,
+    RefreshControl
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/core";
 import styles from "@/assets/styles/cupon.style";
 import RenderHtml from 'react-native-render-html';
 import ApiHook from "@/hooks/ApiHook";
 import config from "@/settings";
+import ShopDataCards from "@/components/ShopDataCards/ShopDataCards";
 
 const CuponPage = () => {
     const navigation = useNavigation();
@@ -13,48 +23,76 @@ const CuponPage = () => {
     const { id } = route.params;
     const { name } = route.params;
     const { width } = Dimensions.get('window');
-    console.log(id)
-    const { data: couponData, loading: couponLoading, error: couponError } = ApiHook(`/getCoupon?id=${id}`);
+    const { getData, data: couponData, loading: couponLoading, error: couponError } = ApiHook();
+    const [refreshing, setRefreshing] = useState(false);
+
+
+    const handleRefresh = async () => {
+        setRefreshing(true);
+
+    };
+
 
     useEffect(() => {
         navigation.setOptions({
             title: name,
             headerBackTitle: 'Back',
         });
-    }, [navigation]);
-    if (couponLoading) return <ActivityIndicator size="large" color="#ffff" />;
 
-    if (!couponData  || couponData.length === 0 && !couponError) {
+        const load = async ()=>{
+            const loadData = await getData(`/getCoupon/${id}/`)
+            setRefreshing(false);
+        }
+        load()
+    }, [navigation, name, refreshing]);
 
-        console.log(couponData)
+    if (couponLoading) return <ActivityIndicator style={{margin: "auto"}} size="large" color="#ffff" />;
+
+    if (!couponData || (couponData.length === 0 && !couponError)) {
+        console.log(couponData);
         return (
             <View style={styles.container}>
-
-                <Text >Data not found</Text>
+                <Text>Data not found</Text>
             </View>
         );
     }
+
     if (couponError) return <Text>Error: {couponError?.message}</Text>;
+
     const handleImagePress = () => {
         alert("buy");
     };
 
+    const goto = () =>{
+        navigation.navigate('reviews', {id: couponData.id, type:'coupon'});
+    }
+
     const dynamicHtml = couponData.description;
+    const short_description = couponData.short_description;
+
 
     return (
         <View style={styles.container}>
-            <ScrollView >
-                <Image style={styles.mainImg} source={{ uri: config.img_link+couponData.img }} />
+            <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+                }
+            >
+                <Image style={styles.mainImg} source={{ uri: config.img_link + couponData.background }} defaultSource={require('@/assets/loader/loader.gif')} />
+                {couponData?.shop_id && <ShopDataCards shopId={couponData.shop_id}/>}
                 <View style={styles.cuponBox}>
-                    <Text style={styles.title}>React Expo {id}</Text>
+                    <Text style={styles.title}>{couponData.name} </Text>
                     <Text style={styles.subtitle}>1 / {couponData.price}$</Text>
                     <Text style={styles.description}>
-                        {couponData.short_description}
+                        <RenderHtml
+                            contentWidth={width}
+                            source={{ html: short_description }}
+                        />
                     </Text>
                     <View style={styles.rev}>
                         <Image style={styles.rImg} source={require("@/assets/images/star.png")} />
-                        <Text>{couponData.rating} (70)</Text>
-                        <Text style={styles.link}>Read Reviews</Text>
+                        <Text>{couponData.rating} ({couponData.review_count})</Text>
+                        <Text  onPress={goto} style={styles.link}>Read Reviews</Text>
                     </View>
                     <RenderHtml
                         contentWidth={width}

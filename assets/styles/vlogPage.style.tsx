@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     vlogBox:{
         width: "90%",
         margin: "auto",
-        marginTop: 20,
+        marginTop: 0,
         marginBottom: 0,
         height: "auto"
     },
@@ -21,10 +21,12 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         borderWidth: 1,
         borderColor: '#008080',
-        marginBottom: 10,
+        marginBottom: 50,
         width: "49%",
         borderRadius: 10,
-        backgroundColor: "rgba(0,128,128,0.4)"
+        backgroundColor: "rgba(0,128,128,0.4)",
+        paddingBottom: 50
+
 
     },
     vlog: {

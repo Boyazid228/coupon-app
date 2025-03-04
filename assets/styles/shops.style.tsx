@@ -44,6 +44,17 @@ const styles = StyleSheet.create({
         borderColor: "#0c6671",
         borderStyle: "dashed",
         marginVertical: 5
+    },
+    title:{
+        fontSize: 32,
+        padding: 15
+    },
+    flstList:{
+        width: "90%",
+        margin: "auto",
+        marginBottom: 0,
+        height: "auto",
+        marginTop: 0
     }
 
 

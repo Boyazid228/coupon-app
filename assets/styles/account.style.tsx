@@ -71,11 +71,79 @@ const styles = StyleSheet.create({
     menu:{
         marginTop:20
     },
-    menuItem:{
+    menuItem: {
         marginVertical: 10,
         fontSize: 16
-    }
+    },
 
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        flexDirection: "row",
+
+    },
+    closeButton: {
+        fontSize: 12,
+        backgroundColor: "#0c6671",
+        borderRadius:50,
+        padding: 10,
+        justifyContent:"center",
+        alignItems: "center",
+        marginHorizontal: 5
+    },
+    modalText: {
+        textAlign: 'center',
+        color: "#fff"
+    },
+    login:{
+
+
+    },
+    banner:{
+        fontSize: 14,
+        backgroundColor: "#0c6671",
+        borderRadius:50,
+        padding: 10,
+        textAlign: "center",
+        top: -50,
+        margin: "auto",
+        width: "90%",
+        paddingVertical: 20
+
+    },
+    bannerText:{
+        color: "#fff",
+        textAlign: "center"
+    },
+    openButton:{},
+    authBtnBox:{
+        flexDirection: 'row',
+        marginTop: 50,
+        justifyContent: "center"
+
+    },
+    authBtn:{
+        width: 150,
+        height: 50,
+
+    }
 
 
 });
