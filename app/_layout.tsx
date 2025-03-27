@@ -1,6 +1,6 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import {Stack, useLocalSearchParams} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
@@ -32,26 +32,34 @@ export default function RootLayout() {
   }
 
 
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <NavigationContainer independent={true}>
           <Stack
               screenOptions={{
                 headerStyle: {
-                  backgroundColor: 'transparent', // Цвет фона из темы
+                  backgroundColor: '#fff', // Цвет фона из темы
                 },
                 headerTintColor: '#0c6671', // Цвет текста из темы
+
               }}
           >
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-              <Stack.Screen name="card"  />
-              <Stack.Screen name="cuponPage"  />
-              <Stack.Screen name="shops"  />
+              <Stack.Screen name="card"  options={{
+                  headerShown: false,
+              }} />
+              <Stack.Screen name="cuponPage" options={{
+                  headerShown: false,
+              }}/>
+              <Stack.Screen name="shops"  options={{ title: "Shops", headerBackTitle: 'back' }}/>
               <Stack.Screen name="reviews"  />
-              <Stack.Screen name="vlogPage"  />
-              <Stack.Screen name="signup"  />
-              <Stack.Screen name="login" />
+              <Stack.Screen name="vlogPage"  options={{
+                  headerShown: false,
+              }}/>
+              <Stack.Screen name="signup"   options={{ title: "Sign Up", headerBackTitle: 'back' }} />
+              <Stack.Screen name="login"  options={{ title: "Login", headerBackTitle: 'back' }}/>
               <Stack.Screen name="+not-found" />
           </Stack>
         </NavigationContainer>

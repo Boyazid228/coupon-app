@@ -6,7 +6,8 @@ import Stars from "@/components/Stars";
 import config from "@/settings";
 import RenderHtml from "react-native-render-html";
 import { useWindowDimensions } from 'react-native';
-import PropTypes from 'prop-types';  // Import PropTypes
+import PropTypes from 'prop-types';
+import {router} from "expo-router";  // Import PropTypes
 
 const Cupon = ({ coupon }) => {
     const navigation = useNavigation();
@@ -14,7 +15,7 @@ const Cupon = ({ coupon }) => {
 
     // Default value for coupon if not provided
     const handleImagePress = (id, name) => {
-        navigation.navigate('cuponPage', { id: id, name: name });
+        router.push(`/cuponPage?id=${id}&name=${encodeURIComponent(name)}`);
     };
 
     const dynamicHtml = coupon.short_description;

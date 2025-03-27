@@ -8,12 +8,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Signup = () => {
     const navigation = useNavigation();
 
-    useEffect(() => {
-        navigation.setOptions({
-            title: "Sign Up",
-            headerBackTitle: 'Back',
-        });
-    }, [navigation]);
+    // useEffect(() => {
+    //     navigation.setOptions({
+    //         title: "Sign Up",
+    //         headerBackTitle: 'Back',
+    //     });
+    // }, [navigation]);
 
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');

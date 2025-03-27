@@ -6,9 +6,10 @@ import MasonryList from 'react-native-masonry-list';
 import ApiHook from '@/hooks/ApiHook';
 import config from '@/settings';
 import { useNavigation } from '@react-navigation/native';
+import {router} from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Vlog = () => {
-    const navigation = useNavigation();
     const { getData, loading, error } = ApiHook();
     const [vlogData, setVlogData] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -37,9 +38,15 @@ const Vlog = () => {
         loadData(true);      // Вызываем функцию загрузки данных
     };
 
-    const navigateToVlog = (item) => {
-        navigation.navigate('vlogPage', { item });
+    const navigateToVlog = async (item) => {
+        try {
+            await AsyncStorage.setItem("vlog", JSON.stringify(item));
+            router.push("/vlogPage");
+        } catch (error) {
+            console.error("Ошибка при сохранении в AsyncStorage:", error);
+        }
     };
+
 
     if (loading && !refreshing) {
         return (

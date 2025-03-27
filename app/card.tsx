@@ -21,11 +21,10 @@ import RenderHtml from "react-native-render-html";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PostApiHook from "@/hooks/PostApiHook";
 import useAuthTokenRefresh from "@/hooks/useAuthTokenRefresh";
+import {router, useLocalSearchParams} from "expo-router";
 
 const Card = () => {
-    const route = useRoute();
-    const { id } = route.params;
-    const navigation = useNavigation();
+    const { id  } = useLocalSearchParams();
 
     const [visible, setVisible] = useState(false);
     const [htmlContent, setHtmlContent] = useState("");
@@ -34,14 +33,6 @@ const Card = () => {
     const [ data, setData ]= useState([])
     const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(() => {
-        navigation.setOptions({
-            title: 'Новая страница',
-            headerBackTitle: 'Back',
-            headerShown: false,
-
-        });
-    }, []);
 
     const handleRefresh = async () => {
         setRefreshing(true);
@@ -69,9 +60,9 @@ const Card = () => {
             }
             const token_parse =  JSON.parse(jsonValue);
 
-            console.log(token_parse)
+
             const user = await postData({token: token_parse.access}, token_parse.access, `/getUser/`);
-            console.log(user)
+
             if(user.code == "token_not_valid"){
 
                 console.log("token_not_valid in likes")
@@ -79,6 +70,7 @@ const Card = () => {
                 if (newAccessToken) {
                     console.log("refreshed token");
                 } else {
+                    router.navigate('/login');
                     console.log("Failed to refresh token");
                 }
             }
@@ -86,6 +78,11 @@ const Card = () => {
                 console.info("KEK")
                 const like_response = await postData({user: user.id, shop: id}, token_parse.access, `/setLike/`);
                 console.log(like_response)
+                if(like_response.status == "error"){
+
+                    alert(like_response.message)
+
+                }
             }
 
             setRefreshing(false);
@@ -113,7 +110,7 @@ const Card = () => {
     }
     function goto() {
 
-        navigation.navigate('reviews', {id: data.id, type: "shop"});
+        router.push(`/reviews?id=${data.id}&type="shop"`);
     }
     function setLike() {
         seLike("start")

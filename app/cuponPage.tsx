@@ -16,12 +16,13 @@ import RenderHtml from 'react-native-render-html';
 import ApiHook from "@/hooks/ApiHook";
 import config from "@/settings";
 import ShopDataCards from "@/components/ShopDataCards/ShopDataCards";
+import {router, useLocalSearchParams} from "expo-router";
 
 const CuponPage = () => {
-    const navigation = useNavigation();
-    const route = useRoute();
-    const { id } = route.params;
-    const { name } = route.params;
+
+
+    const { id, name } = useLocalSearchParams();
+
     const { width } = Dimensions.get('window');
     const { getData, data: couponData, loading: couponLoading, error: couponError } = ApiHook();
     const [refreshing, setRefreshing] = useState(false);
@@ -34,22 +35,17 @@ const CuponPage = () => {
 
 
     useEffect(() => {
-        navigation.setOptions({
-            title: name,
-            headerBackTitle: 'Back',
-        });
 
         const load = async ()=>{
             const loadData = await getData(`/getCoupon/${id}/`)
             setRefreshing(false);
         }
         load()
-    }, [navigation, name, refreshing]);
+    }, [ name, refreshing]);
 
     if (couponLoading) return <ActivityIndicator style={{margin: "auto"}} size="large" color="#ffff" />;
 
     if (!couponData || (couponData.length === 0 && !couponError)) {
-        console.log(couponData);
         return (
             <View style={styles.container}>
                 <Text>Data not found</Text>
@@ -64,7 +60,7 @@ const CuponPage = () => {
     };
 
     const goto = () =>{
-        navigation.navigate('reviews', {id: couponData.id, type:'coupon'});
+        router.push(`/reviews?id=${data.id}&type="coupon"`);
     }
 
     const dynamicHtml = couponData.description;

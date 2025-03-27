@@ -6,19 +6,15 @@ import styles from "@/assets/styles/shops.style";
 import Stars from "@/components/Stars";
 import ApiHook from "@/hooks/ApiHook";
 import config from '@/settings'
+import {router} from "expo-router";
+import { useLocalSearchParams } from 'expo-router';
 const Shops = () => {
-    const navigation = useNavigation();
-    const route = useRoute();
-    const { id } = route.params;
-    const { name } = route.params;
-    const { width } = Dimensions.get('window');
+    const { id  } = useLocalSearchParams();
+
 
     const { getData, data: menuData, loading: menuLoading, error: menuError } = ApiHook();
     useEffect(() => {
-        navigation.setOptions({
-            title: name,
-            headerBackTitle: 'Back',
-        });
+
 
         const load = async ()=>{
             const loadData = await getData(`/getShops/${id}`)
@@ -26,7 +22,7 @@ const Shops = () => {
         }
         load()
 
-    }, [navigation]);
+    }, []);
 
 
     if (menuLoading) return <ActivityIndicator style={{margin: "auto"}} size="large" color="#ffff" />;
@@ -41,7 +37,7 @@ const Shops = () => {
     }
     if (menuError) return <Text>Error: {menuError?.message}</Text>;
     function handleImagePress(id, name){
-        navigation.navigate('card', {id: id, name: name});
+        router.push(`/card?id=${id}&name=${encodeURIComponent(name)}`);
     }
 
 

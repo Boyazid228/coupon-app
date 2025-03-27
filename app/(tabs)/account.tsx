@@ -80,7 +80,7 @@ const Account = () => {
 
     const goto = (link) => {
 
-        router.replace('/login');
+        router.navigate('/'+link);
     }
     const logout = async () =>{
         try {
@@ -201,9 +201,7 @@ const Account = () => {
                             <Text style={styles.modalText}>Sign up</Text>
                         </TouchableOpacity>
 
-                        <Link href="/login" >
-                            Go to About screen
-                        </Link>
+
                     </View>
 
 

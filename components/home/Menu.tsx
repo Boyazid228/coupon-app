@@ -3,11 +3,12 @@ import styles from "@/assets/styles/home.style";
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import config from '@/settings'
+import {router} from "expo-router";
 const Menu = ({items}) => {
 
-    const navigation = useNavigation();
     function handleImagePress(id, name){
-        navigation.navigate('shops', {id: id, name: name});
+        router.push(`/shops?id=${id}&name=${encodeURIComponent(name)}`);
+
     }
     let  img = config.img_link+items.img.replace(/\\/g, '/');
     return (

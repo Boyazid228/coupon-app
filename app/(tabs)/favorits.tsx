@@ -15,6 +15,7 @@ import useAuthTokenRefresh from '@/hooks/useAuthTokenRefresh';
 import config from '@/settings';
 import Stars from '@/components/Stars';
 import styles from '@/assets/styles/shops.style';
+import { router } from 'expo-router';
 
 const Favorits = () => {
     const navigation = useNavigation();
@@ -28,7 +29,7 @@ const Favorits = () => {
         try {
             const jsonValue = await AsyncStorage.getItem('tokens');
             if (!jsonValue) {
-                navigation.navigate('auth/login');
+                router.navigate('login');
                 return;
             }
 
@@ -37,7 +38,7 @@ const Favorits = () => {
             if (user?.code === 'token_not_valid') {
                 const newAccessToken = await refresh();
                 if (!newAccessToken) {
-                    navigation.navigate('auth/login');
+                    router.navigate('login');
                     return;
                 }
             }
@@ -81,7 +82,7 @@ const Favorits = () => {
     }
 
     const handleImagePress = (id, name) => {
-        navigation.navigate('card', { id, name });
+        router.navigate('card', {id: id, name: name});
     };
 
     const renderItem = ({ item }) => (

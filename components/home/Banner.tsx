@@ -4,6 +4,7 @@ import {Image, ImageBackground, Text, TouchableOpacity, View} from "react-native
 import { useNavigation } from "@react-navigation/native";
 import Stars from "@/components/Stars";
 import config from "@/settings";
+import {router} from "expo-router";
 
 const Banner = ({ banner, is_coupon }) => {
 
@@ -12,10 +13,11 @@ const Banner = ({ banner, is_coupon }) => {
     const navigation = useNavigation();
     function handleImagePress(id, name) {
         if(is_coupon){
-            navigation.navigate('cuponPage', {id: id, name: name});
+            router.push(`/cuponPage?id=${id}&name=${encodeURIComponent(name)}`);
+
 
         }else{
-            navigation.navigate('card', {id: id});
+            router.push(`/card?id=${id}`);
 
         }
     }

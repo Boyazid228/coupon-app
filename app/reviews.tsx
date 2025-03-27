@@ -6,21 +6,16 @@ import {useNavigation} from "@react-navigation/native";
 import ApiHook from "@/hooks/ApiHook";
 import Stars from "@/components/Stars";
 import MyReviews from "@/components/MyReviews";
+import {useLocalSearchParams} from "expo-router";
 
 const Reviews = () => {
 
-    const route = useRoute();
-    const { id, type } = route.params;
-    const navigation = useNavigation();
+
+    const { id, type } = useLocalSearchParams();
     const { getData, data: reviewsData, loading: reviewsLoading, error: reviewsError } = ApiHook();
 
     useEffect(() => {
-        navigation.setOptions({
-            title: 'Reviews ',
-            headerBackTitle: 'Back',
 
-
-        });
         const load = async ()=>{
             const loadData = await getData(`/reviews/${id}/${type}/`)
 

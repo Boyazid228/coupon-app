@@ -4,18 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import styles from "@/assets/styles/login.style";
 import PostApiHook from "@/hooks/PostApiHook";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Stack } from 'expo-router';
+import {router, Stack} from 'expo-router';
 import { NavigationContext } from "@react-navigation/native";
 
 const Login = () => {
-    const navigation = useContext(NavigationContext);
+    const navigation = useNavigation();
 
-    useEffect(() => {
-        navigation?.setOptions({
-            title: "Login",
-            headerBackTitle: 'Back',
-        });
-    }, []);
 
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
@@ -52,7 +46,7 @@ const Login = () => {
                 }
 
                 // Navigate to account screen
-                navigation.navigate('account', { login: true });
+                router.navigate('account', { login: true });
             } else {
                 setApiError('Invalid username or password. Please try again.');
             }
