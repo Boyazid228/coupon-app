@@ -82,7 +82,7 @@ const Favorits = () => {
     }
 
     const handleImagePress = (id, name) => {
-        router.navigate('card', {id: id, name: name});
+        router.push(`/card?id=${id}&name="${name}"`);
     };
 
     const renderItem = ({ item }) => (

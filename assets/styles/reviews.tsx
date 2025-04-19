@@ -3,7 +3,7 @@ import {StyleSheet} from "react-native";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 50,
+        padding: 0,
         backgroundColor: '#fff',
 
     },
@@ -40,6 +40,22 @@ const styles = StyleSheet.create({
     },
     title_box:{
         width: 150
+    },
+    add_rew:{
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        flexDirection: "row",
+        marginBottom: 30,
+        paddingRight: 20
+    },
+    overlay:{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: 'rgba(0,0,0,0.64)',
     }
 
 

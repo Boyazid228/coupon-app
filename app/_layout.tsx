@@ -54,7 +54,7 @@ export default function RootLayout() {
                   headerShown: false,
               }}/>
               <Stack.Screen name="shops"  options={{ title: "Shops", headerBackTitle: 'back' }}/>
-              <Stack.Screen name="reviews"  />
+              <Stack.Screen name="reviews"  options={{ title: "Reviews",  headerBackTitle: 'back'  }} />
               <Stack.Screen name="vlogPage"  options={{
                   headerShown: false,
               }}/>

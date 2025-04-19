@@ -17,14 +17,17 @@ import ApiHook from "@/hooks/ApiHook";
 import config from "@/settings";
 import ShopDataCards from "@/components/ShopDataCards/ShopDataCards";
 import {router, useLocalSearchParams} from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import PostApiHook from "@/hooks/PostApiHook";
 
 const CuponPage = () => {
 
 
     const { id, name } = useLocalSearchParams();
-
     const { width } = Dimensions.get('window');
+    const { postData, loading, errors } = PostApiHook(`/getUser/`);
     const { getData, data: couponData, loading: couponLoading, error: couponError } = ApiHook();
+
     const [refreshing, setRefreshing] = useState(false);
 
 
@@ -39,6 +42,7 @@ const CuponPage = () => {
         const load = async ()=>{
             const loadData = await getData(`/getCoupon/${id}/`)
             setRefreshing(false);
+
         }
         load()
     }, [ name, refreshing]);
@@ -55,12 +59,30 @@ const CuponPage = () => {
 
     if (couponError) return <Text>Error: {couponError?.message}</Text>;
 
-    const handleImagePress = () => {
-        alert("buy");
+    const handleImagePress =  async  () => {
+
+        const jsonValue = await AsyncStorage.getItem("tokens");
+        if (!jsonValue) {
+            router.navigate('/login');
+            return null;
+        }
+        const token_parse =  JSON.parse(jsonValue);
+
+        const user = await postData({token: token_parse.access}, token_parse.access, `/getUser/`);
+
+        const order_response = await postData({user: user.id, product: couponData.id, payment: 'pending' }, token_parse.access, `/order/`);
+        if(order_response.status == "error"){
+
+            console.log(order_response.message)
+
+        }else{
+            alert("Success")
+        }
+
     };
 
     const goto = () =>{
-        router.push(`/reviews?id=${data.id}&type="coupon"`);
+        router.push(`/reviews?id=${couponData.id}&type="coupon"`);
     }
 
     const dynamicHtml = couponData.description;

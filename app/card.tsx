@@ -55,7 +55,7 @@ const Card = () => {
 
             const jsonValue = await AsyncStorage.getItem("tokens");
             if (!jsonValue) {
-                navigation.navigate("auth/login")
+                router.navigate('/login');
                 return null;
             }
             const token_parse =  JSON.parse(jsonValue);
@@ -83,6 +83,7 @@ const Card = () => {
                     alert(like_response.message)
 
                 }
+                seLike("finish")
             }
 
             setRefreshing(false);
