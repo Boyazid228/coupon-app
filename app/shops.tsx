@@ -8,9 +8,12 @@ import ApiHook from "@/hooks/ApiHook";
 import config from '@/settings'
 import {router} from "expo-router";
 import { useLocalSearchParams } from 'expo-router';
+import '../i18n/i18n';
+import { useTranslation } from 'react-i18next';
+
 const Shops = () => {
     const { id  } = useLocalSearchParams();
-
+    const { t, i18n } = useTranslation();
 
     const { getData, data: menuData, loading: menuLoading, error: menuError } = ApiHook();
     useEffect(() => {
@@ -31,7 +34,7 @@ const Shops = () => {
         return (
             <View style={styles.container}>
 
-                <Text style={styles.short}>Data not found</Text>
+                <Text style={styles.short}>{ t('Data_not_found') }</Text>
             </View>
         );
     }

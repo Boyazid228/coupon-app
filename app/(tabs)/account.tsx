@@ -10,6 +10,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useRoute} from "@react-navigation/core";
 import { Link } from 'expo-router';
 import { router } from 'expo-router';
+import '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
+
 const Account = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation();
@@ -19,11 +22,14 @@ const Account = () => {
     const { jwt, status } = useTokenValidation(tokenCheck);
     const {refresh, result, error} = useAuthTokenRefresh();
     const { postData, loading, errors } = PostApiHook(`/getUser/`);
-
+    const { t, i18n } = useTranslation();
 
     //const route = useRoute();
     const  login = {}; //route.params
 
+    const changeLanguage = (lang: string) => {
+        i18n.changeLanguage(lang);  // Переключение языка вручную
+    };
 
 
     useEffect(() => {
@@ -73,9 +79,9 @@ const Account = () => {
     }, [login]);
 
 
-    function closeModal() {
+    function closeModal(lang) {
         setModalVisible(!modalVisible);
-        alert('Language changed');
+        changeLanguage(lang)
     }
 
     const goto = (link) => {
@@ -103,7 +109,7 @@ const Account = () => {
                 <View style={styles.box}>
                     <View style={styles.header}>
                         <View style={styles.settings}></View>
-                        <Text style={styles.title}>My Account</Text>
+                        <Text style={styles.title}>{t('My_Account')}</Text>
                         <TouchableOpacity
                             style={styles.openButton}
                             onPress={() => setModalVisible(true)}
@@ -116,29 +122,28 @@ const Account = () => {
                     </View>
 
                     <TouchableOpacity onPress={logout}>
-                        <Text>Log out</Text>
+                        <Text>{t('Log_out')}</Text>
                     </TouchableOpacity>
 
                     <View style={[styles.flex, styles.myBox]}>
                         <View style={styles.myBoxes}>
                             <Image style={styles.img} source={require("@/assets/images/vlogging.png")}/>
-                            <Text style={styles.text}>My Vlog</Text>
+                            <Text style={styles.text}>{ t('My_Vlog') }</Text>
                         </View>
                         <View style={styles.myBoxes}>
                             <Image style={styles.img} source={require("@/assets/images/online-menu.png")}/>
-                            <Text style={styles.text}>My Orders</Text>
+                            <Text style={styles.text}>{ t('My_Orders') }</Text>
                         </View>
                         <View style={styles.myBoxes}>
                             <Image style={styles.img} source={require("@/assets/images/reviews.png")}/>
-                            <Text style={styles.text}>My Reviews</Text>
+                            <Text style={styles.text}>{ t('My_Reviews') }</Text>
                         </View>
                     </View>
-                    <Text style={styles.subTItle}>Some info menu</Text>
                     <View style={styles.menu}>
-                        <Text style={styles.menuItem}>Payment</Text>
-                        <Text style={styles.menuItem}>Return condition</Text>
-                        <Text style={styles.menuItem}>Sale</Text>
-                        <Text style={styles.menuItem}>FAQ</Text>
+                        <Text style={styles.menuItem}>{ t('Payment') }</Text>
+                        <Text style={styles.menuItem}>{ t('Return_condition') }</Text>
+                        <Text style={styles.menuItem}>{ t('Sale') }</Text>
+                        <Text style={styles.menuItem}>{ t('FAQ') }</Text>
                     </View>
 
                     <Modal
@@ -156,13 +161,13 @@ const Account = () => {
 
                                 <TouchableOpacity
                                     style={styles.closeButton}
-                                    onPress={closeModal}
+                                    onPress={()=> closeModal("en")}
                                 >
                                     <Text style={styles.modalText}>English</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.closeButton}
-                                    onPress={closeModal}
+                                    onPress={()=> closeModal("kr")}
                                 >
                                     <Text style={styles.modalText}>Korean</Text>
                                 </TouchableOpacity>
@@ -178,7 +183,7 @@ const Account = () => {
                 <View style={styles.box}>
                     <View style={styles.header}>
                         <View style={styles.settings}></View>
-                        <Text style={styles.title}>My Account</Text>
+                        <Text style={styles.title}>{t('My_Account')}</Text>
                         <TouchableOpacity
                             style={styles.openButton}
                             onPress={() => setModalVisible(true)}
@@ -192,13 +197,13 @@ const Account = () => {
                             style={[styles.closeButton, styles.authBtn]}
                             onPress={() => goto('login')}
                         >
-                            <Text style={styles.modalText}>Sing in</Text>
+                            <Text style={styles.modalText}>{ t('Sing_in') }</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.closeButton, styles.authBtn]}
                             onPress={() => goto('signup')}
                         >
-                            <Text style={styles.modalText}>Sign up</Text>
+                            <Text style={styles.modalText}>{ t('Sing_up') }</Text>
                         </TouchableOpacity>
 
 
@@ -229,7 +234,7 @@ const Account = () => {
                                     style={styles.closeButton}
                                     onPress={closeModal}
                                 >
-                                    <Text style={styles.modalText}>Korean</Text>
+                                    <Text style={styles.modalText}>한국어</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

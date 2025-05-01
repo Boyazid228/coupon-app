@@ -17,15 +17,21 @@ import ApiHook from "@/hooks/ApiHook";
 import config from "@/settings";
 import ShopDataCards from "@/components/ShopDataCards/ShopDataCards";
 import {router, useLocalSearchParams} from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import PostApiHook from "@/hooks/PostApiHook";
+import '../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 const CuponPage = () => {
 
 
     const { id, name } = useLocalSearchParams();
-
     const { width } = Dimensions.get('window');
+    const { postData, loading, errors } = PostApiHook(`/getUser/`);
     const { getData, data: couponData, loading: couponLoading, error: couponError } = ApiHook();
+
     const [refreshing, setRefreshing] = useState(false);
+    const { t, i18n } = useTranslation();
 
 
     const handleRefresh = async () => {
@@ -39,6 +45,7 @@ const CuponPage = () => {
         const load = async ()=>{
             const loadData = await getData(`/getCoupon/${id}/`)
             setRefreshing(false);
+
         }
         load()
     }, [ name, refreshing]);
@@ -48,19 +55,36 @@ const CuponPage = () => {
     if (!couponData || (couponData.length === 0 && !couponError)) {
         return (
             <View style={styles.container}>
-                <Text>Data not found</Text>
+                <Text>{ t(Data_not_found) }</Text>
             </View>
         );
     }
 
     if (couponError) return <Text>Error: {couponError?.message}</Text>;
 
-    const handleImagePress = () => {
-        alert("buy");
+    const handleImagePress =  async  () => {
+
+        const jsonValue = await AsyncStorage.getItem("tokens");
+        if (!jsonValue) {
+            router.navigate('/login');
+            return null;
+        }
+        const token_parse =  JSON.parse(jsonValue);
+
+        const user = await postData({token: token_parse.access}, token_parse.access, `/getUser/`);
+
+        const order_response = await postData({user: user.id, product: couponData.id, payment: 'pending' }, token_parse.access, `/order/`);
+        if(order_response.status == "error"){
+
+
+        }else{
+            alert("Success")
+        }
+
     };
 
     const goto = () =>{
-        router.push(`/reviews?id=${data.id}&type="coupon"`);
+        router.push(`/reviews?id=${couponData.id}&type="coupon"`);
     }
 
     const dynamicHtml = couponData.description;
@@ -88,7 +112,7 @@ const CuponPage = () => {
                     <View style={styles.rev}>
                         <Image style={styles.rImg} source={require("@/assets/images/star.png")} />
                         <Text>{couponData.rating} ({couponData.review_count})</Text>
-                        <Text  onPress={goto} style={styles.link}>Read Reviews</Text>
+                        <Text  onPress={goto} style={styles.link}>{t('Read_Reviews')}</Text>
                     </View>
                     <RenderHtml
                         contentWidth={width}
@@ -97,7 +121,7 @@ const CuponPage = () => {
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.banner} onPress={handleImagePress}>
-                <Text style={styles.bannerText}>Buy {couponData.price}$</Text>
+                <Text style={styles.bannerText}>{ t('Buy') } {couponData.price}$</Text>
             </TouchableOpacity>
         </View>
     );

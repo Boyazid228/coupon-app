@@ -22,6 +22,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import PostApiHook from "@/hooks/PostApiHook";
 import useAuthTokenRefresh from "@/hooks/useAuthTokenRefresh";
 import {router, useLocalSearchParams} from "expo-router";
+import '../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 const Card = () => {
     const { id  } = useLocalSearchParams();
@@ -32,7 +34,7 @@ const Card = () => {
     const [ coupons, setCoupons ]= useState([])
     const [ data, setData ]= useState([])
     const [refreshing, setRefreshing] = useState(false);
-
+    const { t, i18n } = useTranslation();
 
     const handleRefresh = async () => {
         setRefreshing(true);
@@ -55,7 +57,7 @@ const Card = () => {
 
             const jsonValue = await AsyncStorage.getItem("tokens");
             if (!jsonValue) {
-                navigation.navigate("auth/login")
+                router.navigate('/login');
                 return null;
             }
             const token_parse =  JSON.parse(jsonValue);
@@ -65,17 +67,13 @@ const Card = () => {
 
             if(user.code == "token_not_valid"){
 
-                console.log("token_not_valid in likes")
                 const newAccessToken = await refresh(); // Добавлено `await`
                 if (newAccessToken) {
-                    console.log("refreshed token");
                 } else {
                     router.navigate('/login');
-                    console.log("Failed to refresh token");
                 }
             }
             if(like == "start"){
-                console.info("KEK")
                 const like_response = await postData({user: user.id, shop: id}, token_parse.access, `/setLike/`);
                 console.log(like_response)
                 if(like_response.status == "error"){
@@ -83,6 +81,7 @@ const Card = () => {
                     alert(like_response.message)
 
                 }
+                seLike("finish")
             }
 
             setRefreshing(false);
@@ -149,16 +148,16 @@ const Card = () => {
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.rBox} onPress={showInfo}>
                                 <Image style={styles.rImg} source={require("@/assets/images/store.png")} defaultSource={require('@/assets/loader/loader.gif')}/>
-                                <Text >Info</Text>
+                                <Text >{ t("Info") }</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.rBox} onPress={setLike}>
                                 <Image style={styles.rImg} source={require("@/assets/images/heart.png")} defaultSource={require('@/assets/loader/loader.gif')}/>
-                                <Text >Like</Text>
+                                <Text >{ t("Like") }</Text>
                             </TouchableOpacity>
                         </View>
 
                     </View>
-                    {(!coupons || (coupons.length === 0 && !menuLoading)) ? <Text  style={styles.ntf}>Data not found</Text> : <View  style={styles.box}>
+                    {(!coupons || (coupons.length === 0 && !menuLoading)) ? <Text  style={styles.ntf}>{t('Data_not_found')}</Text> : <View  style={styles.box}>
 
                             { coupons.map(i => (
                                 <Cupon key={i.id} coupon={i}/>

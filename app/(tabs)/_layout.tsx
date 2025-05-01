@@ -5,10 +5,13 @@ import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Favorits from "@/app/(tabs)/favorits";
-
+import '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+    const { t, i18n } = useTranslation();
 
   return (
     <Tabs
@@ -20,7 +23,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: t('Home') ,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'home' : 'home-outline'} color={"#0c6671"} />
           ),
@@ -30,7 +33,7 @@ export default function TabLayout() {
         <Tabs.Screen
             name="vlog"
             options={{
-                title: 'Vlog',
+                title: t('Vlog'),
                 tabBarIcon: ({ color, focused }) => (
                     <TabBarIcon name={focused ? 'library' : 'library-outline'} color={"#0c6671"} />
                 ), tabBarActiveTintColor: "#0c6671"
@@ -41,7 +44,7 @@ export default function TabLayout() {
         <Tabs.Screen
             name="map"
             options={{
-                title: 'Near me',
+                title: t('Near_me'),
                 tabBarIcon: ({ color, focused }) => (
                     <TabBarIcon name={focused ? 'map' : 'map-outline'} color={"#0c6671"} />
                 ), tabBarActiveTintColor: "#0c6671"
@@ -52,7 +55,7 @@ export default function TabLayout() {
         <Tabs.Screen
             name="favorits"
             options={{
-                title: 'Favorits',
+                title: t('Favorites'),
                 tabBarIcon: ({ color, focused }) => (
                     <TabBarIcon name={focused ? 'heart' : 'heart-outline'} color={"#0c6671"} />
                 ), tabBarActiveTintColor: "#0c6671"
@@ -65,7 +68,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="account"
         options={{
-          title: 'Account',
+          title: t('Account'),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'person' : 'person-outline'} color={"#0c6671"} />
           ), tabBarActiveTintColor: "#0c6671"

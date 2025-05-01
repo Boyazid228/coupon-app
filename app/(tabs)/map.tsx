@@ -13,6 +13,8 @@ import customUserMarkerImage from '@/assets/images/pin-point.png';
 import ApiHook from "@/hooks/ApiHook";
 import { router } from "expo-router";
 import config from "@/settings";
+import '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 export default function Map() {
     const [location, setLocation] = useState(null);
@@ -34,6 +36,8 @@ export default function Map() {
             await getData(`/getMarks`);
         })();
     }, []);
+
+    const { t, i18n } = useTranslation();
 
     // Функция для перехода на страницу магазина
     const handlePress = (id, name) => {
@@ -76,12 +80,12 @@ export default function Map() {
                         latitude: location.coords.latitude,
                         longitude: location.coords.longitude,
                     }}
-                    title="You are here"
+                    title={t('You_are_here')}
                 >
                     <Image source={customUserMarkerImage} style={styles.markerImage} />
                     <Callout>
                         <View style={styles.callout}>
-                            <Text>You are here</Text>
+                            <Text>{t('You_are_here')}</Text>
                         </View>
                     </Callout>
                 </Marker>
