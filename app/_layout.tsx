@@ -11,6 +11,8 @@ import Reviews from "@/app/reviews";
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from "@/app/login";
+import '../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -26,6 +28,8 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  const { t, i18n } = useTranslation();
 
   if (!loaded) {
     return null;
@@ -53,13 +57,13 @@ export default function RootLayout() {
               <Stack.Screen name="cuponPage" options={{
                   headerShown: false,
               }}/>
-              <Stack.Screen name="shops"  options={{ title: "Shops", headerBackTitle: 'back' }}/>
-              <Stack.Screen name="reviews"  options={{ title: "Reviews",  headerBackTitle: 'back'  }} />
+              <Stack.Screen name="shops"  options={{ title: t('Shops'), headerBackTitle: t('back') }}/>
+              <Stack.Screen name="reviews"  options={{ title: t('Reviews'),  headerBackTitle:  t('back')  }} />
               <Stack.Screen name="vlogPage"  options={{
                   headerShown: false,
               }}/>
-              <Stack.Screen name="signup"   options={{ title: "Sign Up", headerBackTitle: 'back' }} />
-              <Stack.Screen name="login"  options={{ title: "Login", headerBackTitle: 'back' }}/>
+              <Stack.Screen name="signup"   options={{ title: t('Sing_up') , headerBackTitle:  t('back') }} />
+              <Stack.Screen name="login"  options={{ title: t('Sing_in'), headerBackTitle:  t('back') }}/>
               <Stack.Screen name="+not-found" />
           </Stack>
         </NavigationContainer>

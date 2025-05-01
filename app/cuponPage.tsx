@@ -19,6 +19,8 @@ import ShopDataCards from "@/components/ShopDataCards/ShopDataCards";
 import {router, useLocalSearchParams} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PostApiHook from "@/hooks/PostApiHook";
+import '../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 const CuponPage = () => {
 
@@ -29,6 +31,7 @@ const CuponPage = () => {
     const { getData, data: couponData, loading: couponLoading, error: couponError } = ApiHook();
 
     const [refreshing, setRefreshing] = useState(false);
+    const { t, i18n } = useTranslation();
 
 
     const handleRefresh = async () => {
@@ -52,7 +55,7 @@ const CuponPage = () => {
     if (!couponData || (couponData.length === 0 && !couponError)) {
         return (
             <View style={styles.container}>
-                <Text>Data not found</Text>
+                <Text>{ t(Data_not_found) }</Text>
             </View>
         );
     }
@@ -73,7 +76,6 @@ const CuponPage = () => {
         const order_response = await postData({user: user.id, product: couponData.id, payment: 'pending' }, token_parse.access, `/order/`);
         if(order_response.status == "error"){
 
-            console.log(order_response.message)
 
         }else{
             alert("Success")
@@ -110,7 +112,7 @@ const CuponPage = () => {
                     <View style={styles.rev}>
                         <Image style={styles.rImg} source={require("@/assets/images/star.png")} />
                         <Text>{couponData.rating} ({couponData.review_count})</Text>
-                        <Text  onPress={goto} style={styles.link}>Read Reviews</Text>
+                        <Text  onPress={goto} style={styles.link}>{t('Read_Reviews')}</Text>
                     </View>
                     <RenderHtml
                         contentWidth={width}
@@ -119,7 +121,7 @@ const CuponPage = () => {
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.banner} onPress={handleImagePress}>
-                <Text style={styles.bannerText}>Buy {couponData.price}$</Text>
+                <Text style={styles.bannerText}>{ t('Buy') } {couponData.price}$</Text>
             </TouchableOpacity>
         </View>
     );

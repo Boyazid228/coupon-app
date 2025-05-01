@@ -13,6 +13,8 @@ import SearchBox from '@/components/SearchBox';
 import Menu from '@/components/home/Menu';
 import Banner from '@/components/home/Banner';
 import ApiHook from "@/hooks/ApiHook";
+import '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 export default function App() {
     const [text, setText] = useState('');
@@ -22,6 +24,8 @@ export default function App() {
         hotData: [],
         sellerData: [],
     });
+
+    const { t, i18n } = useTranslation();
 
     const {getData: getData, data: responseData, error:responseError, loading: l} = ApiHook();
 
@@ -65,6 +69,8 @@ export default function App() {
     const renderItem = ({ item }) => <Banner banner={item} is_coupon={true} />;
     const render = ({ item }) => <Banner banner={item} is_coupon={false} />;
 
+    const d = new Date().getFullYear();
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -83,7 +89,7 @@ export default function App() {
                 </View>
 
                 <View>
-                    <Text style={styles.subTitle}>Hot 🔥</Text>
+                    <Text style={styles.subTitle}>{ t('Hot') }🔥</Text>
                     <View style={styles.boxBanner}>
                         <FlatList
                             data={data.hotData}
@@ -96,7 +102,7 @@ export default function App() {
                 </View>
 
                 <View>
-                    <Text style={styles.subTitle}>Best Sellers 🥇</Text>
+                    <Text style={styles.subTitle}>{ t('Best_Sellers')} 🥇</Text>
                     <View style={styles.boxBanner}>
                         <FlatList
                             data={data.sellerData}
@@ -109,7 +115,7 @@ export default function App() {
                 </View>
 
                 <View>
-                    <Text style={styles.subTitle}>Most visited places 🚩</Text>
+                    <Text style={styles.subTitle}>{t('Most_visited_places')} 🚩</Text>
                     <View style={styles.boxBanner}>
                         <FlatList
                             data={data.sellerData}
@@ -121,7 +127,7 @@ export default function App() {
                     </View>
                 </View>
 
-                <Text style={styles.footer}>Copyright. All Rights Reserved. © 2024 </Text>
+                <Text style={styles.footer}>{t('Copyright')} © { d } </Text>
             </ScrollView>
         </View>
     );

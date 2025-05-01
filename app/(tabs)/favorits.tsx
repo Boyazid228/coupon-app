@@ -16,6 +16,8 @@ import config from '@/settings';
 import Stars from '@/components/Stars';
 import styles from '@/assets/styles/shops.style';
 import { router } from 'expo-router';
+import '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 const Favorits = () => {
     const navigation = useNavigation();
@@ -24,6 +26,7 @@ const Favorits = () => {
     const [likes, setLikes] = useState([]);
     const [loadingData, setLoadingData] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const { t, i18n } = useTranslation();
 
     const fetchLikes = async () => {
         try {
@@ -108,7 +111,7 @@ const Favorits = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>My Favorites</Text>
+            <Text style={styles.title}>{t('My_Favorites')}</Text>
             <FlatList
                 data={likes}
                 renderItem={renderItem}
