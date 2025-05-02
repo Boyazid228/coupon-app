@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import config from '@/settings'
+import i18n from '@/i18n/i18n';
 
 const ApiHook  = () => {
     const [data, setData] = useState(null);
@@ -11,12 +12,14 @@ const ApiHook  = () => {
 
 
         const getData = async (url, token='') => {
+            const lang = i18n.language || 'en';
             try {
                 let response = await fetch(config.apiBaseUrl+url, {
 
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
+                        'Accept-Language': lang,
                         ...(token && { 'Authorization': `Bearer ${token}` }),
                     },
                 });

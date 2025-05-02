@@ -52,7 +52,7 @@ export default function App() {
             setRefreshing(false);
         };
         fetchData();
-    }, [refreshing]);
+    }, [refreshing, i18n.language]);
 
     if (!data.menuData.length && !data.hotData.length && !data.sellerData.length) {
         return <ActivityIndicator style={{ margin: 'auto' }} size="large" color="#ffff" />;

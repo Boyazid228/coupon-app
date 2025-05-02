@@ -28,7 +28,7 @@ const Account = () => {
     const  login = {}; //route.params
 
     const changeLanguage = (lang: string) => {
-        i18n.changeLanguage(lang);  // Переключение языка вручную
+        i18n.changeLanguage(lang);
     };
 
 
@@ -167,7 +167,7 @@ const Account = () => {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.closeButton}
-                                    onPress={()=> closeModal("kr")}
+                                    onPress={()=> closeModal("ko")}
                                 >
                                     <Text style={styles.modalText}>Korean</Text>
                                 </TouchableOpacity>
