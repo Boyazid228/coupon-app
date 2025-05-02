@@ -41,7 +41,7 @@ const resources = {
             Buy: 'Buy',
         },
     },
-    kr: {
+    ko: {
         translation: {
             welcome: 'Добро пожаловать',
             Hot: '뜨거운',
